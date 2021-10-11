@@ -19,7 +19,7 @@ const company = {
         next();
     },
     validateCompanyExists: async (req, res, next) => {
-        const id = req.params.id;
+        const id = req.params.id || req.body.companyId;
         const companies = await companyService.getAll();
         const found = companies.find(c => c.id == id);
         if (!found)

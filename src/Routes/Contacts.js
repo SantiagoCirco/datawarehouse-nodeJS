@@ -6,27 +6,29 @@ const { middlewares } = require('../Middlewares');
 
 router.get(
     '/',
-    contactController.getAllContacts  // IMPLEMENTER
+    contactController.getAllContacts
 );
 
 router.post(
     '/',
-    middlewares.contact.checkBodyFields, // IMPLEMENTAR
+    middlewares.contact.checkBodyNotEmpty,
+    middlewares.contact.checkChannelsId,
     middlewares.company.validateCityId,
     middlewares.company.validateCompanyExists,
-    contactController.addNewContact  // IMPLEMENTER
+    contactController.addNewContact
 );
 
 router.put(
     '/:id',
-    middlewares.contact.checkContactId, // IMPLEMENTAR
-    contactController.updateContact  // IMPLEMENTER
+    middlewares.contact.checkContactId,
+    middlewares.contact.validateIds,
+    contactController.updateContact
 );
 
 router.delete(
     '/:id',
-    middlewares.contact.checkContactId,   // IMPLEMENTER
-    contactController.deleteContact   // IMPLEMENTER
+    middlewares.contact.checkContactId,
+    contactController.deleteContact
 );
 
 module.exports = router;

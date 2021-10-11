@@ -95,6 +95,21 @@ const ERRORS = {
         message: 'La compañía no se pudo encontrar.',
         code: 'COMPANY_NOT_FOUND'
     },
+    CHANNEL_NOT_FOUND: {
+        status: 404,
+        message: 'El canal de contacto no se pudo encontrar',
+        code: 'CHANNEL_NOT_FOUND'
+    },
+    CONTACT_NOT_FOUND: {
+        status: 404,
+        message: 'El contacto que desea encontrar no existe',
+        code: "CONTACT_NOT_FOUND",
+    },
+    POSITION_NOT_FOUND: {
+        status: 404,
+        message: 'El puesto que desea encontrar no existe',
+        code: "POSITION_NOT_FOUND",
+    }
 };
 
 module.exports = { ERRORS };

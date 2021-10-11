@@ -28,6 +28,10 @@ const Contact = db.define(
             type: DataTypes.ENUM('0', '25', '50', '75', '100'),
             allowNull: false,
         },
+        avatar: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         positionId: {
             type: DataTypes.INTEGER,
             allowNull: false,
