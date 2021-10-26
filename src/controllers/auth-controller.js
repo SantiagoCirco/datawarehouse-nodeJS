@@ -1,5 +1,5 @@
 const { authService, userService, encryptionService } = require('../Services');
-const { ERRORS } = require('../constants');
+const { ERRORS, response } = require('../constants');
 
 const authController = {
 
@@ -10,9 +10,8 @@ const authController = {
             const newUser = await authService.addNewUser({
                 firstName, lastName, email, profile, hashedPassword
             });
-            res.status(201).json(newUser);
+            res.status(201).json(response(newUser));
         } catch (error) {
-            console.log('ÁCA!');
             res.status(500).json(ERRORS.SERVER_ERROR);
         }
     },
@@ -28,7 +27,7 @@ const authController = {
             res
                 .status(200)
                 .header('auth-token', token)
-                .json({ data: { token, duration } });
+                .json(response({ token, duration }));
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
         }

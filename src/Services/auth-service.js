@@ -17,7 +17,7 @@ const authService = {
     },
 
     generateUserToken: async (user) => {
-        const expiresIn = '60m';
+        const expiresIn = '15m';
         const token = jwt.sign({
             name: user.email,
             id: user.id
