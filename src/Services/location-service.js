@@ -3,6 +3,7 @@ const { locationRepository } = require('../Repositories');
 const locationService = {
     findRegionById: async (id) => await locationRepository.findRegionById(id),
     findCountryById: async (id) => await locationRepository.findCountryById(id),
+    findCityById: async (id) => await locationRepository.findCityById(id),
     findAllRegions: async () => await locationRepository.findAllRegions(),
     findAllCountries: async () => await locationRepository.findAllCountries(),
     findAllCities: async () => await locationRepository.findAllCities(),

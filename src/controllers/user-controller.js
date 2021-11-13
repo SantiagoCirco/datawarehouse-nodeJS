@@ -1,6 +1,6 @@
 
 const { userService, encryptionService } = require('../Services');
-const { ERRORS } = require('../constants');
+const { ERRORS, response } = require('../constants');
 
 const userController = {
 
@@ -8,7 +8,7 @@ const userController = {
         try {
 
             const users = await userService.getAllUsers();
-            res.status(200).json(users);
+            res.status(200).json(response(users));
 
         } catch (error) {
 
@@ -24,7 +24,7 @@ const userController = {
             if (user.hasOwnProperty('notFound')) {
                 return res.status(404).json(ERRORS.USER_NOT_FOUND);
             }
-            res.status(200).json(user);
+            res.status(200).json(response(user));
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
         }
@@ -49,7 +49,7 @@ const userController = {
             if (updatedUser.hasOwnProperty('notFound')) {
                 return res.status(404).json(ERRORS.USER_NOT_FOUND);
             }
-            res.status(200).json(updatedUser);
+            res.status(200).json(response(updatedUser));
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
         }
@@ -58,11 +58,11 @@ const userController = {
     deleteUserById: async (req, res) => {
         const id = req.params.id;
         try {
-            const response = await userService.deleteUser(id);
-            if (response.hasOwnProperty('notFound')) {
+            const resp = await userService.deleteUser(id);
+            if (resp.hasOwnProperty('notFound')) {
                 return res.status(404).json(ERRORS.USER_NOT_FOUND);
             }
-            res.status(200).json(response);
+            res.status(200).json(response(resp));
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
         }

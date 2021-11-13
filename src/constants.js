@@ -42,6 +42,12 @@ const ERRORS = {
         message: 'Se requiere credenciales con autorización.',
         code: 'UNAUTHORIZED'
     },
+    NOT_ADMIN: {
+        ok: false,
+        status: 401,
+        message: 'Se requiere credenciales con autorización de administrador.',
+        code: 'NOT_ADMIN'
+    },
     SESSION_EXPIRED: {
         ok: false,
         status: 401,

@@ -1,25 +1,37 @@
 const { locationService, companyService } = require('../Services');
-const { ERRORS } = require('../constants');
+const { ERRORS, response } = require('../constants');
 const { locationRepository } = require('../Repositories');
 
 const locationController = {
     getAllRegions: async (req, res) => {
         const regiones = await locationService.findAllRegions();
-        res.status(200).json(regiones);
+        res.status(200).json(response(regiones));
     },
     getAllCountries: async (req, res) => {
         const countries = await locationService.findAllCountries();
-        res.status(200).json(countries);
+        res.status(200).json(response(countries));
     },
     getAllCities: async (req, res) => {
         const cities = await locationService.findAllCities();
-        res.status(200).json(cities);
+        res.status(200).json(response(cities));
+    },
+    getCity: async (req, res) => {
+        const id = req.params.id;
+        try {
+            const city = await locationService.findCityById(id);
+            if (!city) throw new Error('NOT_FOUND');
+            res.status(200).json(response(city));
+        } catch (error) {
+            if (error.message === 'NOT_FOUND')
+                return res.status(404).json(ERRORS.CITY_NOT_FOUND);
+            return res.status(500).json(ERRORS.SERVER_ERROR);
+        }
     },
     addNewRegion: async (req, res) => {
         const regionBody = { name: req.body.name };
         try {
             const regionAdded = await locationService.createNewRegion(regionBody);
-            res.status(200).json(regionAdded);
+            res.status(200).json(response(regionAdded));
 
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
@@ -33,7 +45,7 @@ const locationController = {
         };
         try {
             const countryAdded = await locationService.createNewCountry(countryBody);
-            res.status(200).json(countryAdded);
+            res.status(200).json(response(countryAdded));
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
         }
@@ -43,7 +55,7 @@ const locationController = {
         const cityBody = { name, countryId };
         try {
             const cityAdded = await locationService.createNewCity(cityBody);
-            res.status(200).json(cityAdded);
+            res.status(200).json(response(cityAdded));
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
         }
@@ -55,7 +67,7 @@ const locationController = {
         }
         try {
             const regionUpdated = await locationService.updateRegion(id, regionBody);
-            res.status(200).json(regionUpdated);
+            res.status(200).json(response(regionUpdated));
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
         }
@@ -69,7 +81,7 @@ const locationController = {
         }
         try {
             const countryUpdated = await locationService.updateCountry(id, countryBody);
-            res.status(200).json(countryUpdated);
+            res.status(200).json(response(countryUpdated));
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
         }
@@ -82,7 +94,7 @@ const locationController = {
         }
         try {
             const cityUpdated = await locationService.updateCity(id, cityBody);
-            res.status(200).json(cityUpdated);
+            res.status(200).json(response(cityUpdated));
         } catch (error) {
             res.status(500).json(ERRORS.SERVER_ERROR);
         }
@@ -91,8 +103,8 @@ const locationController = {
         const id = req.params.id;
         try {
             const companies = await companyService.getAll();
-            const response = await locationService.deleteRegion(id, companies);
-            res.status(200).json(response);
+            const resp = await locationService.deleteRegion(id, companies);
+            res.status(200).json(response(resp));
         } catch (error) {
             if (error.message === "HAS_COMPANY") {
                 res.status(403).json(ERRORS.RESOURCE_NEEDED);
@@ -105,8 +117,8 @@ const locationController = {
         const id = req.params.id;
         try {
             const companies = await companyService.getAll();
-            const response = await locationService.deleteCountry(id, companies);
-            res.status(200).json(response);
+            const resp = await locationService.deleteCountry(id, companies);
+            res.status(200).json(response(resp));
         } catch (error) {
             if (error.message === "HAS_COMPANY") {
                 res.status(403).json(ERRORS.RESOURCE_NEEDED);
@@ -119,10 +131,10 @@ const locationController = {
         const id = req.params.id;
         try {
             const companies = await companyService.getAll();
-            const response = await locationService.deleteCity(id, companies);
-            res.status(200).json(response);
+            const resp = await locationService.deleteCity(id, companies);
+            res.status(200).json(response(resp));
         } catch (error) {
-            if (!error.message === "HAS_COMPANY") {
+            if (error.message !== "HAS_COMPANY") {
                 return res.status(500).json(ERRORS.SERVER_ERROR);
             }
             return res.status(403).json(ERRORS.RESOURCE_NEEDED);

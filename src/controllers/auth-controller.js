@@ -21,7 +21,7 @@ const authController = {
         try {
             const user = await userService.getUserByEmail(req.body.email);
             if (user.hasOwnProperty('notFound')) {
-                return res.status(404).json(ERRORS.INPUT_FORMAT);
+                return res.status(401).json(ERRORS.INPUT_FORMAT);
             }
             const token = await authService.generateUserToken(user);
             res

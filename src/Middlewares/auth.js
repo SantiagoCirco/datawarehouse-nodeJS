@@ -8,10 +8,10 @@ async function validateAdminAuthorization(req, res, next) {
         const requestToken = req.headers.authorization.substring(7);
         const userId = authService.verifyUserToken(requestToken);
         const user = await userService.getUserById(userId);
-        if (!user)
+        if (user.hasOwnProperty('notFound'))
             return res.status(404).json(ERRORS.INVALID_TOKEN);
         if (user.profile !== 'Admin')
-            return res.status(401).json(ERRORS.UNAUTHORIZED);
+            return res.status(401).json(ERRORS.NOT_ADMIN);
         next();
     } catch (error) {
         if (error.name === 'TokenExpiredError')
@@ -58,10 +58,8 @@ async function validateUserIfExists(req, res, next) {
 async function validateUserLogin(req, res, next) {
     const { email, password } = req.body;
     const user = await userService.getUserByEmail(email);
-    if (user.hasOwnProperty('notFound'))
-        return res.status(404).json(ERRORS.USER_NOT_EXISTS);
-    if (!user)
-        return res.status(401).json(ERRORS.INVALID_LOGIN_CRED);
+    if (!user || user.hasOwnProperty('notFound'))
+        return res.status(404).json(ERRORS.INVALID_LOGIN_CRED);
     const validPassword = await encryptionService.compare(password, user.password)
     if (!validPassword)
         return res.status(401).json(ERRORS.INVALID_LOGIN_CRED);

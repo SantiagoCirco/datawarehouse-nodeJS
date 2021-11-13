@@ -51,13 +51,12 @@ router.post(
 
 router.put(
     '/countries/:id',
-    middlewares.location.validateRegionExists,
+    //middlewares.location.validateRegionExists,
     locationController.updateCountry
 );
 
 router.delete(
     '/countries/:id',
-    middlewares.location.validateRegionExists,
     locationController.deleteCountry
 );
 
@@ -68,6 +67,11 @@ router.delete(
 router.get(
     '/countries/cities',
     locationController.getAllCities
+);
+
+router.get(
+    '/countries/cities/:id',
+    locationController.getCity
 );
 
 router.post(
@@ -86,7 +90,6 @@ router.put(
 
 router.delete(
     '/countries/cities/:id',
-    middlewares.location.validateCountryExists,
     locationController.deleteCity
 );
 
